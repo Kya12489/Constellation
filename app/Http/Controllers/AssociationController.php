@@ -8,20 +8,19 @@ use App\Services\Api\RnaAPI;
 
 class AssociationController extends Controller
 {
-    public function listeAssociations()
+    public function listeAssociations(): Response
     {
-        $assoAPI = new RnaAPI();
-        $assosJson = $assoAPI->searchAssociations(0, 10, []);
+        $page = max(1, (int) request()->get('page', 1)); 
         
-        // Debug: Ajoutez ceci pour voir ce qui est retourné
-        \Log::info('Associations data:', ['data' => $assosJson]);
+        $assoAPI = new RnaAPI();
+        $assosJson = $assoAPI->searchAssociations($page - 1, 10, []);
         
         return Inertia::render('Associations/ListeAssociations', [
             'canLogin' => \Route::has('login'),
             'canRegister' => \Route::has('register'),
-            // Changé 'assosData' en 'assos' pour correspondre à Vue
-            // Et récupérez 'results' au lieu de 'data'
             'assos' => $assosJson['results'] ?? [],
+            'currentPage' => $page, 
+            'total' => $assosJson['total_count'] ?? 0, 
         ]);
     }
 }
