@@ -1,5 +1,7 @@
 <?php
 namespace App\Services\Api;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class RnaAPI
 {
@@ -7,28 +9,23 @@ class RnaAPI
 
     public function searchAssociations(int $page=0,int $limit = 10,array $params = [])
     {
-        $baseUrl = $this->baseUrl.'?page='.$page.'&limit='.$limit;
+        $queryParams = array_merge($params, [
+            'page' => $page,
+            'limit' => $limit,
+        ]);
+
         try {
-            $response = Http::get($this->baseUrl, $params);
-            
+            $response = Http::get($this->baseUrl, $queryParams);
+
             if ($response->successful()) {
-                return [
-                    'success' => true,
-                    'data' => $response->json()
-                ];
+                return $response->json();
+            } else {
+                Log::error('RNA API Error: ' . $response->status() . ' - ' . $response->body());
+                return null;
             }
-            
-            return [
-                'success' => false,
-                'error' => 'Erreur lors de la requête: ' . $response->status()
-            ];
-            
         } catch (\Exception $e) {
-            Log::error('RNA API Error: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'error' => $e->getMessage()
-            ];
+            Log::error('RNA API Exception: ' . $e->getMessage());
+            return null;
         }
     }
 }

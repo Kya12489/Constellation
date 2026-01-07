@@ -14,7 +14,7 @@
     </head>
     <body class="font-sans antialiased">
         <div class=" text-black/50 dark:bg-black bg-gray-200 dark:text-white/50">
-            <div class="relative flex min-h-screen flex-col items-center selection:bg-[#FF2D20] selection:text-white">
+            <div class="relative flex min-h-screen flex-col items-center">
                 <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                     @inertia
                 </div>
