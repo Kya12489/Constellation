@@ -1,22 +1,25 @@
 <?php
 namespace App\Services\Api;
+
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class RnaAPI
 {
-    private $baseUrl = 'https://hub.huwise.com/api/explore/v2.1/catalog/datasets/ref-france-association-repertoire-national/records/';
-
-    public function searchAssociations(int $page=0,int $limit = 10,array $params = [])
+    // Enlevez le slash final
+    private $baseUrl = 'https://hub.huwise.com/api/explore/v2.1/catalog/datasets/ref-france-association-repertoire-national/records';
+    
+    public function searchAssociations(int $page = 0, int $limit = 10, array $params = [])
     {
         $queryParams = array_merge($params, [
-            'page' => $page,
+            'offset' => $page * $limit, // Changé de 'page' à 'offset'
             'limit' => $limit,
         ]);
-
+        
         try {
-            $response = Http::get($this->baseUrl, $queryParams);
-
+            //a changer en ::get en production
+            $response = Http::withoutVerifying()->get($this->baseUrl, $queryParams);
+            
             if ($response->successful()) {
                 return $response->json();
             } else {
@@ -29,4 +32,3 @@ class RnaAPI
         }
     }
 }
-?>
