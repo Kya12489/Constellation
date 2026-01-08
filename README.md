@@ -5,6 +5,7 @@ Le projet a pour but de servir de base moderne pour une application complète en
 
 ## Fonctionnalités
 
+- ✅ Verification de la validité des site web enregistré sur l'api des associations (fait grace a une requête http)
 - ✅ Authentification utilisateur avec Laravel Breeze + Inertia.js
 - ✅ Frontend Vue.js réactif avec Inertia.js (composants, pages, layout)
 - ✅ API REST Laravel pour la récupération de données
@@ -65,7 +66,7 @@ Modifier le fichier `.env` avec vos identifiants de base de données :
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=constellation
+DB_DATABASE=constellation 
 DB_USERNAME=root
 DB_PASSWORD=
 ```
