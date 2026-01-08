@@ -60,6 +60,9 @@ php artisan key:generate
 
 ### 4. Configurer la base de données
 
+Le fichier Constellation-bdd.sql est le script de la base de données.
+Vous pouvez modifier le nom de la table a conditions de mettre a jour votre .env
+
 Modifier le fichier `.env` avec vos identifiants de base de données :
 
 ```env
