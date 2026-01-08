@@ -10,15 +10,30 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * AssociationController - Contrôleur principal pour la gestion des associations
+ * 
+ * Gère l'affichage, la création et la suppression des associations, ainsi que
+ * la gestion des commentaires et évaluations associées
+ */
 class AssociationController extends Controller
 {
     private Association $associationModel;
     
+    /**
+     * Constructeur - Initialise le modèle Association
+     */
     function __construct()
     {
         $this->associationModel = new Association();
     }
 
+    /**
+     * Crée une nouvelle association avec un RNA ID donné
+     *
+     * @param string $rnaId Identifiant RNA unique de l'association
+     * @return \Illuminate\Http\RedirectResponse Redirection vers la page de l'association
+     */
     public function createAssociation(string $rnaId)
     {
         try {
@@ -44,6 +59,12 @@ class AssociationController extends Controller
         }
     }
 
+    /**
+     * Affiche les détails d'une association avec ses commentaires et évaluations
+     *
+     * @param string $rnaId Identifiant RNA de l'association
+     * @return Response Vue Inertia avec les données de l'association
+     */
     public function detailAssociation(string $rnaId): Response
     {
         $association = $this->associationModel->where('rna_id', $rnaId)->firstOrFail();
@@ -83,6 +104,13 @@ class AssociationController extends Controller
         ]);
     }
 
+    /**
+     * Ajoute un nouveau commentaire et une évaluation à une association
+     *
+     * @param Request $request Requête HTTP contenant le contenu et la note
+     * @param string $rnaId Identifiant RNA de l'association
+     * @return \Illuminate\Http\RedirectResponse Redirection avec message de succès/erreur
+     */
     public function storeComment(Request $request, string $rnaId)
     {
         // Vérifier que l'utilisateur est connecté
@@ -118,6 +146,14 @@ class AssociationController extends Controller
         return back()->with('success', 'Commentaire ajouté avec succès');
     }
 
+    /**
+     * Met à jour un commentaire existant
+     *
+     * @param Request $request Requête HTTP contenant les données mises à jour
+     * @param string $rnaId Identifiant RNA de l'association
+     * @param int $commentId ID du commentaire à mettre à jour
+     * @return \Illuminate\Http\RedirectResponse Redirection avec message de succès/erreur
+     */
     public function updateComment(Request $request, string $rnaId, int $commentId)
     {
         if (!Auth::check()) {
@@ -141,6 +177,13 @@ class AssociationController extends Controller
         return back()->with('success', 'Commentaire modifié avec succès');
     }
 
+    /**
+     * Supprime un commentaire existant
+     *
+     * @param string $rnaId Identifiant RNA de l'association
+     * @param int $commentId ID du commentaire à supprimer
+     * @return \Illuminate\Http\RedirectResponse Redirection avec message de succès/erreur
+     */
     public function deleteComment(string $rnaId, int $commentId)
     {
         if (!Auth::check()) {
@@ -159,6 +202,11 @@ class AssociationController extends Controller
         return back()->with('success', 'Commentaire supprimé avec succès');
     }
 
+    /**
+     * Affiche la liste de toutes les associations
+     *
+     * @return Response Vue Inertia avec la liste des associations
+     */
     public function listeAssociations(): Response
     {
         return Inertia::render('Associations/ListeAssociations', [

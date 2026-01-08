@@ -1,7 +1,16 @@
 <script setup>
+/**
+ * Composant ResponsiveNavLink - Lien de navigation responsive mobile
+ * Version mobile du NavLink pour la navigation responsive
+ */
 import { computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 
+/**
+ * Props du composant
+ * @property {String} href - URL cible du lien
+ * @property {Boolean} active - Indique si le lien est actif (optionnel)
+ */
 const props = defineProps({
     href: {
         type: String,
@@ -12,6 +21,10 @@ const props = defineProps({
     },
 });
 
+/**
+ * Computed - Classes CSS dynamiques selon l'état actif
+ * @returns {String} Classes Tailwind appropriées
+ */
 const classes = computed(() =>
     props.active
         ? 'block w-full ps-3 pe-4 py-2 border-l-4 border-indigo-400 text-start text-base font-medium text-indigo-700 bg-indigo-50 focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-indigo-700 transition duration-150 ease-in-out'

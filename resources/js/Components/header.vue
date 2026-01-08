@@ -1,8 +1,19 @@
 <script setup>
+    /**
+     * Composant Header - En-tête principal de l'application
+     * 
+     * Affiche le logo, le titre et la navigation avec les options de connexion/inscription
+     * ou le dashboard/profil si l'utilisateur est connecté
+     */
     import { Link } from '@inertiajs/vue3';
     import Dropdown from '@/Components/Dropdown.vue';
     import DropdownLink from '@/Components/DropdownLink.vue';
 
+    /**
+     * Props du composant
+     * @property {Boolean} canLogin - Indique si la connexion est disponible
+     * @property {Boolean} canRegister - Indique si l'inscription est disponible
+     */
     defineProps({
         canLogin: {
             type: Boolean,

@@ -53,21 +53,41 @@ class User extends Authenticatable
         'remember_token'
     ];
 
+    /**
+     * Récupère toutes les associations présidées par l'utilisateur
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany Relation vers les associations
+     */
     public function associations()
     {
         return $this->hasMany(Association::class, 'president_id');
     }
 
+    /**
+     * Récupère tous les commentaires postés par l'utilisateur
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany Relation vers les commentaires
+     */
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * Récupère tous les favoris de l'utilisateur
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany Relation vers les favoris
+     */
     public function favorites()
     {
         return $this->hasMany(Favorite::class);
     }
 
+    /**
+     * Récupère toutes les demandes d'adhésion traitées par l'utilisateur
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany Relation vers les demandes d'adhésion
+     */
     public function membership_requests()
     {
         return $this->hasMany(MembershipRequest::class, 'responded_by');

@@ -12,14 +12,17 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Favorite
  * 
- * @property int $id
- * @property int $user_id
- * @property int $association_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * Modèle représentant un favori d'un utilisateur pour une association
+ * Permet aux utilisateurs de marquer leurs associations préférées
  * 
- * @property User $user
- * @property Association $association
+ * @property int $id Clé primaire
+ * @property int $user_id ID de l'utilisateur
+ * @property int $association_id ID de l'association
+ * @property Carbon|null $created_at Date de création
+ * @property Carbon|null $updated_at Date de dernière mise à jour
+ * 
+ * @property User $user Utilisateur propriétaire du favori
+ * @property Association $association Association favorie
  *
  * @package App\Models
  */
@@ -37,11 +40,21 @@ class Favorite extends Model
 		'association_id'
 	];
 
+	/**
+	 * Récupère l'utilisateur propriétaire du favori
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo Relation vers l'utilisateur
+	 */
 	public function user()
 	{
 		return $this->belongsTo(User::class);
 	}
 
+	/**
+	 * Récupère l'association favorie
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo Relation vers l'association
+	 */
 	public function association()
 	{
 		return $this->belongsTo(Association::class);

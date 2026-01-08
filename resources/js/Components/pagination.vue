@@ -1,6 +1,17 @@
 <script setup>
+/**
+ * Composant Pagination - Contrôle de pagination réutilisable
+ * Affiche les boutons précédent/suivant et les informations d'affichage
+ */
 import { computed } from 'vue';
 
+/**
+ * Props du composant
+ * @property {Number} page - Numéro de page actuelle (0-indexed)
+ * @property {Number} total - Nombre total d'éléments
+ * @property {Number} perPage - Nombre d'éléments par page
+ * @property {Boolean} loading - Indique si les données se chargent
+ */
 const props = defineProps({
     page: {
         type: Number,
@@ -20,21 +31,36 @@ const props = defineProps({
     }
 });
 
+/**
+ * Emit du composant
+ * @event update:page Émis quand la page change
+ * @event previous Émis quand on clique sur précédent
+ * @event next Émis quand on clique sur suivant
+ */
 const emit = defineEmits(['update:page', 'previous', 'next']);
 
-// Calculer s'il y a une page suivante
+/**
+ * Computed - Détermine s'il y a une page suivante
+ * @returns {Boolean} true si une page suivante existe
+ */
 const hasNextPage = computed(() => {
     return (props.page + 1) * props.perPage < props.total;
 });
 
-// Calculer les informations d'affichage
+/**
+ * Computed - Calcule les informations d'affichage des résultats
+ * @returns {Object} {start, end} numéros d'affichage des résultats
+ */
 const displayInfo = computed(() => {
     const start = (props.page * props.perPage) + 1;
     const end = Math.min((props.page + 1) * props.perPage, props.total);
     return { start, end };
 });
 
-// Gestion du clic précédent
+/**
+ * Gère le clic sur le bouton précédent
+ * @returns {void}
+ */
 const handlePrevious = () => {
     if (props.page > 0 && !props.loading) {
         emit('update:page', props.page - 1);
@@ -42,7 +68,10 @@ const handlePrevious = () => {
     }
 };
 
-// Gestion du clic suivant
+/**
+ * Gère le clic sur le bouton suivant
+ * @returns {void}
+ */
 const handleNext = () => {
     if (hasNextPage.value && !props.loading) {
         emit('update:page', props.page + 1);

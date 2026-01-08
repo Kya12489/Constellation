@@ -1,6 +1,14 @@
 <script setup>
+/**
+ * Composant DropdownLink - Lien à l'intérieur d'un dropdown/menu
+ * Utilisé dans les menus déroulants pour les actions contextuelles
+ */
 import { Link } from '@inertiajs/vue3';
 
+/**
+ * Props du composant
+ * @property {String} href - URL cible du lien (obligatoire)
+ */
 defineProps({
     href: {
         type: String,

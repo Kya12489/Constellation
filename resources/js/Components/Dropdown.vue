@@ -1,6 +1,18 @@
 <script setup>
+/**
+ * Composant Dropdown - Menu déroulant réutilisable
+ * 
+ * Affiche un menu qui s'ouvre/ferme au clic avec gestion de l'échappement et fermeture au clic dehors
+ * Personnalisable en termes d'alignement et de largeur
+ */
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 
+/**
+ * Props du composant
+ * @property {String} align - Alignement du dropdown (left, right, center)
+ * @property {String} width - Largeur du dropdown en Tailwind (48 = w-48)
+ * @property {String} contentClasses - Classes CSS additionnelles pour le contenu
+ */
 const props = defineProps({
     align: {
         type: String,

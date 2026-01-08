@@ -1,4 +1,13 @@
 <script setup>
+/**
+ * Composant SecondaryButton - Bouton secondaire avec styling blanc
+ * Bouton blanc pour les actions secondaires
+ */
+
+/**
+ * Props du composant
+ * @property {String} type - Type HTML du bouton (button, submit, reset)
+ */
 defineProps({
     type: {
         type: String,

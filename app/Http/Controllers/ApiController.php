@@ -4,8 +4,19 @@ namespace App\Http\Controllers;
 use App\Models\Association;
 use Illuminate\Http\Request;
 
+/**
+ * ApiController - Contrôleur API pour les associations
+ * 
+ * Gère les requêtes API liées aux associations, notamment la récupération des évaluations
+ */
 class ApiController extends Controller
 {
+    /**
+     * Récupère la note moyenne et le nombre total d'évaluations pour une association
+     *
+     * @param string $rnaId Identifiant RNA de l'association
+     * @return \Illuminate\Http\JsonResponse Réponse JSON contenant averageRating et totalRatings
+     */
     public function getRateOf(string $rnaId)
     {
         // Trouver l'association par RNA ID

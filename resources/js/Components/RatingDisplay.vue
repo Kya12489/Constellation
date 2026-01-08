@@ -1,7 +1,19 @@
 <script setup>
+/**
+ * Composant RatingDisplay - Affichage des évaluations sous forme d'étoiles
+ * 
+ * Récupère et affiche la note moyenne d'une association avec les étoiles et le nombre d'avis
+ * Les données sont chargées via une API lors du montage du composant
+ */
 import { ref, onMounted, computed } from 'vue';
 import RnaAPI from '/App/Services/Api/RnaAPI';
 
+/**
+ * Props du composant
+ * @property {String} rnaId - Identifiant RNA de l'association (obligatoire)
+ * @property {Boolean} showCount - Afficher le nombre d'avis
+ * @property {String} starSize - Taille des étoiles en Tailwind (4, 6, 8, etc.)
+ */
 const props = defineProps({
     rnaId: {
         type: String,

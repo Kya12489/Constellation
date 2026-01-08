@@ -1,8 +1,21 @@
 <script setup>
+/**
+ * Composant Checkbox - Case à cocher réutilisable
+ * Utilise v-model pour la liaison bidirectionnelle avec un array ou boolean
+ */
 import { computed } from 'vue';
 
+/**
+ * Emit du composant
+ * @event update:checked Émis quand l'état de la case change
+ */
 const emit = defineEmits(['update:checked']);
 
+/**
+ * Props du composant
+ * @property {Array|Boolean} checked - Valeur courante de la case (array pour checkbox groupe, bool pour simple)
+ * @property {*} value - Valeur associée à cette case
+ */
 const props = defineProps({
     checked: {
         type: [Array, Boolean],

@@ -1,6 +1,15 @@
 <script setup>
+/**
+ * Composant TextInput - Champ de texte réutilisable avec v-model
+ * 
+ * Enveloppe un input HTML avec styling Tailwind et support du focus automatique
+ */
 import { onMounted, ref } from 'vue';
 
+/**
+ * Modèle v-model du composant
+ * @property {String} model - Valeur du champ de texte (bind bidirectionnel)
+ */
 const model = defineModel({
     type: String,
     required: true,

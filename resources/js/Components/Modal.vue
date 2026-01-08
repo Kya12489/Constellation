@@ -1,6 +1,18 @@
 <script setup>
+/**
+ * Composant Modal - Fenêtre modale réutilisable
+ * 
+ * Affiche un dialogue modal qui peut être ouvert/fermé avec gestion du Escape
+ * et verrouillage du scroll du body quand la modale est ouverte
+ */
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
+/**
+ * Props du composant
+ * @property {Boolean} show - Contrôle si la modale est visible
+ * @property {String} maxWidth - Largeur maximale (sm, md, lg, xl, 2xl)
+ * @property {Boolean} closeable - Indique si la modale peut être fermée
+ */
 const props = defineProps({
     show: {
         type: Boolean,

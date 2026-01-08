@@ -1,8 +1,24 @@
 <script setup>
+/**
+ * Composant CommentsSection - Gestion des commentaires et évaluations
+ * 
+ * Affiche tous les commentaires d'une association avec la possibilité pour les
+ * utilisateurs connectés d'ajouter, modifier ou supprimer leurs propres commentaires
+ * Permet également de noter l'association de 1 à 5 étoiles
+ */
 import { ref, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import RatingDisplay from './RatingDisplay.vue';
 
+/**
+ * Props du composant
+ * @property {Object} association - L'association dont on affiche les commentaires
+ * @property {Array} comments - Liste des commentaires de l'association
+ * @property {Number} averageRating - Note moyenne de l'association
+ * @property {Number} totalRatings - Nombre total d'évaluations
+ * @property {Object} userComment - Commentaire existant de l'utilisateur connecté (si any)
+ * @property {Boolean} isAuthenticated - Indique si l'utilisateur est connecté
+ */
 const props = defineProps({
     association: {
         type: Object,
@@ -30,6 +46,7 @@ const props = defineProps({
     }
 });
 
+// État local du composant
 const showCommentForm = ref(false);
 const editingCommentId = ref(null);
 const formData = ref({
@@ -37,9 +54,17 @@ const formData = ref({
     rating: 5
 });
 
+/**
+ * Computed property - Détermine si on est en mode édition
+ * @returns {Boolean} true si on édite un commentaire existant
+ */
 const isEditing = computed(() => editingCommentId.value !== null);
 
-// Initialiser le formulaire avec le commentaire existant si l'utilisateur a déjà commenté
+/**
+ * Initialise le formulaire avec le commentaire existant de l'utilisateur
+ * ou avec les valeurs par défaut
+ * @returns {void}
+ */
 const initForm = () => {
     if (props.userComment) {
         formData.value = {
@@ -57,6 +82,11 @@ const initForm = () => {
     }
 };
 
+/**
+ * Soumet le formulaire de commentaire (création ou modification)
+ * Utilise Inertia.js pour envoyer la requête au serveur
+ * @returns {void}
+ */
 const submitComment = () => {
     if (isEditing.value) {
         // Modifier le commentaire existant
@@ -78,6 +108,11 @@ const submitComment = () => {
     }
 };
 
+/**
+ * Supprime un commentaire après confirmation
+ * @param {Number} commentId - ID du commentaire à supprimer
+ * @returns {void}
+ */
 const deleteComment = (commentId) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?')) {
         router.delete(`/association/${props.association.rna_id}/comment/${commentId}`, {
@@ -89,6 +124,11 @@ const deleteComment = (commentId) => {
     }
 };
 
+/**
+ * Formate une date pour l'affichage en français
+ * @param {String} dateString - Chaîne de date ISO
+ * @returns {String} Date formatée (ex: "8 janvier 2026 14:30")
+ */
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('fr-FR', {
@@ -100,6 +140,11 @@ const formatDate = (dateString) => {
     }).format(date);
 };
 
+/**
+ * Génère un tableau de booléens indiquant quelles étoiles doivent être remplies
+ * @param {Number} rating - Note sur 5
+ * @returns {Array<Boolean>} Tableau de 5 booléens (true = étoile remplie)
+ */
 const getStars = (rating) => {
     return Array(5).fill(0).map((_, i) => i < rating);
 };

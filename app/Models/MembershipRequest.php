@@ -12,23 +12,27 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class MembershipRequest
  * 
- * @property int $id
- * @property int $user_id
- * @property int $association_id
- * @property int $statut_id
- * @property string|null $message
- * @property string|null $phone
- * @property array|null $availability
- * @property array|null $skills
- * @property string|null $response_message
- * @property Carbon|null $responded_at
- * @property int|null $responded_by
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
+ * Modèle représentant une demande d'adhésion à une association
+ * Permet aux utilisateurs de demander à rejoindre une association
+ * Les présidents peuvent accepter ou refuser ces demandes
  * 
- * @property User|null $user
- * @property Association $association
- * @property StatutsDemande $statuts_demande
+ * @property int $id Clé primaire
+ * @property int $user_id ID de l'utilisateur demandeur
+ * @property int $association_id ID de l'association ciblée
+ * @property int $statut_id ID du statut de la demande
+ * @property string|null $message Message de motivation du demandeur
+ * @property string|null $phone Téléphone de contact du demandeur
+ * @property array|null $availability Disponibilités du demandeur (JSON)
+ * @property array|null $skills Compétences du demandeur (JSON)
+ * @property string|null $response_message Message de réponse du président
+ * @property Carbon|null $responded_at Date de réponse
+ * @property int|null $responded_by ID de l'utilisateur ayant répondu
+ * @property Carbon|null $created_at Date de création
+ * @property Carbon|null $updated_at Date de dernière mise à jour
+ * 
+ * @property User|null $user Utilisateur demandeur
+ * @property Association $association Association ciblée
+ * @property StatutsDemande $statuts_demande Statut de la demande
  *
  * @package App\Models
  */
@@ -59,16 +63,32 @@ class MembershipRequest extends Model
 		'responded_by'
 	];
 
+	/**
+	 * Récupère l'utilisateur demandeur (à titre informatif)
+	 * Note: Cette relation utilise responded_by au lieu de user_id
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo Relation vers l'utilisateur
+	 */
 	public function user()
 	{
 		return $this->belongsTo(User::class, 'responded_by');
 	}
 
+	/**
+	 * Récupère l'association ciblée par la demande d'adhésion
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo Relation vers l'association
+	 */
 	public function association()
 	{
 		return $this->belongsTo(Association::class);
 	}
 
+	/**
+	 * Récupère le statut de la demande d'adhésion
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo Relation vers le statut
+	 */
 	public function statuts_demande()
 	{
 		return $this->belongsTo(StatutsDemande::class, 'statut_id');
