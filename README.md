@@ -1,59 +1,178 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Constellation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Constellation est une application web construite avec le framework **Laravel** et un frontend en **Vue.js** via Inertia et Breeze.
+Le projet a pour but de servir de base moderne pour une application complète en PHP/Vue avec authentification, API et gestion d'associations.
 
-## About Laravel
+## Fonctionnalités
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- ✅ Authentification utilisateur avec Laravel Breeze + Inertia.js
+- ✅ Frontend Vue.js réactif avec Inertia.js (composants, pages, layout)
+- ✅ API REST Laravel pour la récupération de données
+- ✅ Gestion des associations avec système de rating intégré
+- ✅ Compilation des assets via Vite, Tailwind CSS et PostCSS
+- ✅ Architecture modulaire et extensible
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Stack technique
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend** : Laravel (PHP 8.x)
+- **Frontend** : Vue.js 3 avec Inertia.js et Laravel Breeze
+- **Build & styles** : Vite, Tailwind CSS, PostCSS
+- **Base de données** : MySQL/MariaDB/PostgreSQL (configurable)
+- **Tests** : PHPUnit
 
-## Learning Laravel
+## Prérequis
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+- PHP 8.0 ou supérieur
+- Composer
+- Node.js 16+ et npm
+- Serveur de base de données (MySQL, MariaDB, PostgreSQL, etc.)
+- Extensions PHP : OpenSSL, PDO, Mbstring, Tokenizer, XML, Ctype, JSON, BCMath
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Installation
 
-## Laravel Sponsors
+### 1. Cloner le dépôt
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+git clone https://github.com/Kya12489/Constellation.git
+cd Constellation
+```
 
-### Premium Partners
+### 2. Installer les dépendances
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+# Dépendances PHP
+composer install
 
-## Contributing
+# Dépendances Node.js
+npm install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Configuration d'environnement
 
-## Code of Conduct
+```bash
+# Créer le fichier .env
+cp .env.example .env
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Générer la clé d'application
+php artisan key:generate
+```
 
-## Security Vulnerabilities
+### 4. Configurer la base de données
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Modifier le fichier `.env` avec vos identifiants de base de données :
 
-## License
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=constellation
+DB_USERNAME=root
+DB_PASSWORD=
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 5. Lancer les migrations
+
+```bash
+php artisan migrate
+# php artisan db:seed   # pour ajouter des données de test (optionnel)
+```
+
+## Démarrage en développement
+
+### Terminal 1 - Backend
+
+```bash
+php artisan serve
+```
+
+Le backend sera disponible sur `http://localhost:8000`
+
+### Terminal 2 - Frontend (Vite)
+
+```bash
+npm run dev
+```
+
+L'application sera compilée en temps réel et accessible sur `http://localhost:8000`
+
+## Scripts disponibles
+
+### Développement
+
+```bash
+# Serveur Laravel
+php artisan serve
+
+# Compilation frontend en temps réel
+npm run dev
+
+# Builder pour la production
+npm run build
+```
+
+### Tests
+
+```bash
+# Lancer tous les tests
+php artisan test
+
+# Tests avec couverture
+php artisan test --coverage
+```
+
+### Artisan (commandes Laravel)
+
+```bash
+# Vider les caches
+php artisan cache:clear
+php artisan config:clear
+
+# Créer une nouvelle migration
+php artisan make:migration nom_migration
+
+# Créer un nouveau modèle
+php artisan make:model NomModele
+```
+
+## Structure du projet
+
+```
+Constellation/
+├── app/                    # Code application (Modèles, Contrôleurs, etc.)
+├── bootstrap/              # Bootstrap de l'application
+├── config/                 # Fichiers de configuration
+├── database/               # Migrations et seeders
+├── public/                 # Fichiers publics (assets compilés, images)
+├── resources/              # Vues Vue.js, CSS, images source
+│   ├── js/                 # Composants Vue et pages
+│   └── css/                # Styles (Tailwind)
+├── routes/                 # Routes API et web
+├── storage/                # Fichiers générés (logs, cache, uploads)
+├── tests/                  # Tests PHPUnit
+├── vite.config.js          # Configuration Vite
+├── tailwind.config.js      # Configuration Tailwind
+├── package.json            # Dépendances npm
+└── composer.json           # Dépendances PHP
+```
+
+## Contribution
+
+Les contributions sont les bienvenues ! Voici comment contribuer :
+
+1. **Fork** le dépôt
+2. **Créer une branche** pour ta fonctionnalité (`git checkout -b feature/ma-fonctionnalite`)
+3. **Commit** les changements (`git commit -m 'Ajouter ma fonctionnalité'`)
+4. **Push** vers la branche (`git push origin feature/ma-fonctionnalite`)
+5. **Ouvrir une Pull Request**
+
+## Licence
+
+Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
+
+## Support
+
+Pour toute question ou problème, n'hésites pas à ouvrir une [issue](https://github.com/Kya12489/Constellation/issues).
+
+---
+
+**Construit avec ❤️ en PHP et Vue.js**
