@@ -7,7 +7,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\AssociationController;
 
 Route::get('/', [AssociationController::class, 'listeAssociations']);
-
+Route::get('/association/insert/{rnaId}', [AssociationController::class, 'createAssociation']);
+Route::get('/association/{rnaId}', [AssociationController::class, 'detailAssociation']);
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
