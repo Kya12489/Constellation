@@ -2,6 +2,7 @@
 import { ref, watch, onMounted, nextTick } from 'vue';
 import Header from '@/Components/header.vue';
 import PaginationWidget from '@/Components/pagination.vue';
+import RatingDisplay from '@/Components/RatingDisplay.vue';
 import { Head } from '@inertiajs/vue3';
 import RnaAPI from '/App/Services/Api/RnaAPI';
 
@@ -13,7 +14,6 @@ const props = defineProps({
 const assos = ref([]);
 const page = ref(0);
 
-
 //variable de filtre
 const filterTitle = ref('');
 const filterKeyWords = ref('');
@@ -23,8 +23,10 @@ const total = ref(0);
 const loading = ref(false);
 const error = ref(null);
 
-// Référence pour l'input
-const inputRef = ref(null);
+// Références pour les inputs
+const titleInputRef = ref(null);
+const keywordsInputRef = ref(null);
+const cityInputRef = ref(null);
 
 // Timer pour le debounce
 let debounceTimer = null;
@@ -41,11 +43,9 @@ const fetchAssociations = async (maintainFocus = false) => {
     if (filterTitle.value) {
         filters.title = filterTitle.value;
     }
-
     if (filterKeyWords.value) {
         filters.keyWords = filterKeyWords.value;
     }
-
     if (filterCity.value) {
         filters.city = filterCity.value;
     }
@@ -63,43 +63,47 @@ const fetchAssociations = async (maintainFocus = false) => {
     
     loading.value = false;
     
-    // Restaurer le focus si l'input était actif
-    if (maintainFocus && activeElement === inputRef.value) {
+    // Restaurer le focus sur le bon input
+    if (maintainFocus && activeElement) {
         await nextTick();
-        inputRef.value?.focus();
+        if (activeElement === titleInputRef.value) {
+            titleInputRef.value?.focus();
+        } else if (activeElement === keywordsInputRef.value) {
+            keywordsInputRef.value?.focus();
+        } else if (activeElement === cityInputRef.value) {
+            cityInputRef.value?.focus();
+        }
     }
 };
 
-// Watcher pour le filtre avec debounce
+// Watchers pour les filtres avec debounce
 watch(filterTitle, () => {
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
-        page.value = 0; // Réinitialiser à la page 0
-        fetchAssociations(true); // Maintenir le focus
+        page.value = 0;
+        fetchAssociations(true);
     }, 500);
 });
+
 watch(filterKeyWords, () => {
-    
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
-        page.value = 0; // Réinitialiser à la page 0
-        fetchAssociations(true); // Maintenir le focus
+        page.value = 0;
+        fetchAssociations(true);
     }, 500);
 });
 
 watch(filterCity, () => {
-    
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
-        page.value = 0; // Réinitialiser à la page 0
-        fetchAssociations(true); // Maintenir le focus
+        page.value = 0;
+        fetchAssociations(true);
     }, 500);
 });
 
-
 // Watcher pour la pagination
 watch(page, () => {
-    fetchAssociations(false); // Pas de focus pour la pagination
+    fetchAssociations(false);
 });
 
 // Charger les données au montage
@@ -118,10 +122,10 @@ onMounted(() => {
                 <div class="p-6">
                     <h1 class="text-2xl font-bold mb-6">Liste des Associations</h1>
                     
-                    <!-- Filtre -->
-                    <div class="mb-6 flex  gap-4">
+                    <!-- Filtres -->
+                    <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                         <input 
-                            ref="inputRef"
+                            ref="titleInputRef"
                             type="text" 
                             placeholder="Filtrer par nom..." 
                             class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -129,17 +133,17 @@ onMounted(() => {
                             :disabled="loading"
                         />
                         <input 
-                            ref="inputRef"
+                            ref="keywordsInputRef"
                             type="text" 
-                            placeholder="Mots-clés (mot1,mot2,mot3)..." 
+                            placeholder="Mots-clés..." 
                             class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             v-model="filterKeyWords"
                             :disabled="loading"
                         />
                         <input
-                        ref="inputRef"
-                            placeholder="Recherche par ville..."
+                            ref="cityInputRef"
                             type="text"
+                            placeholder="Ville..."
                             class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             v-model="filterCity"
                             :disabled="loading"
@@ -173,48 +177,54 @@ onMounted(() => {
                         
                         <ul v-else class="space-y-4 mb-8">
                             <li v-for="asso in assos" :key="asso.id_association" 
-                                class="border border-gray-200 p-5 rounded-lg hover:shadow-md transition-shadow flex flex-col lg:flex-row gap-4">
-                                <div class="flex-1">
-                                    <h3 class="font-bold text-lg text-gray-900 mb-2">{{ asso.title }}</h3>
-                                    <p class="text-gray-600 mb-2">{{ asso.object }}</p>
-                                    <div class="text-sm text-gray-500 space-y-1">
-                                        <p v-if="asso.creation_date">
-                                            <span class="font-medium">Créée le:</span> {{ asso.creation_date }}
-                                        </p>
-                                        <p>
-                                            <span class="font-medium">Adresse:</span> 
-                                            {{ asso.street_number_asso }} {{ asso.street_type_asso }} {{ asso.street_name_asso ? asso.street_name_asso : asso.comp_address_asso}}, 
-                                            {{ asso.pc_address_manager ? asso.pc_address_manager : asso.pc_address_asso }} FRANCE
-                                            
-                                        </p>
+                                class="border border-gray-200 p-5 rounded-lg hover:shadow-md transition-shadow">
+                                <div class="flex flex-col lg:flex-row gap-4">
+                                    <div class="flex-1">
+                                        <h3 class="font-bold text-lg text-gray-900 mb-2">{{ asso.title }}</h3>
+                                        
+                                        <!-- Note moyenne -->
+                                        <div class="mb-2">
+                                            <RatingDisplay :rna-id="asso.id" :show-count="true" />
+                                        </div>
+                                        
+                                        <p class="text-gray-600 mb-2">{{ asso.object }}</p>
+                                        <div class="text-sm text-gray-500 space-y-1">
+                                            <p v-if="asso.creation_date">
+                                                <span class="font-medium">Créée le:</span> {{ asso.creation_date }}
+                                            </p>
+                                            <p>
+                                                <span class="font-medium">Adresse:</span> 
+                                                {{ asso.street_number_asso }} {{ asso.street_type_asso }} 
+                                                {{ asso.street_name_asso || asso.comp_address_asso }}, 
+                                                {{ asso.pc_address_manager || asso.pc_address_asso }} 
+                                                {{ asso.com_name_asso }}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                
-                                <div class="flex items-start flex-col justify-center lg:items-center">
-                                    <a v-if="asso.website && asso.website !== 'Invalid'"
-                                        :href="asso.website"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center gap-2"
-                                    >
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                        </svg>
-                                        Visiter le site
-                                    </a>
-                                    <span v-else-if="asso.website === 'Invalid'" 
-                                       class="px-4 py-2 text-gray-400 text-sm">
-                                        Site invalide
-                                    </span>
-                                    <span v-else class="px-4 py-2 text-gray-400 text-sm">
-                                        Pas de site web
-                                    </span>
-                                    <a
-                                        :href="'/association/insert/' + asso.id"
-                                        class="ml-4 px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center gap-2"
-                                    >
-                                        Voir détails
-                                    </a>
+                                    
+                                    <div class="flex lg:flex-col items-start gap-2 justify-center">
+                                        <a v-if="asso.website && asso.website !== 'Invalid'"
+                                            :href="asso.website"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center gap-2 whitespace-nowrap"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                            </svg>
+                                            Visiter le site
+                                        </a>
+                                        
+                                        <a
+                                            :href="'/association/insert/' + asso.id"
+                                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2 whitespace-nowrap"
+                                        >
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Voir détails
+                                        </a>
+                                    </div>
                                 </div>
                             </li>
                         </ul>

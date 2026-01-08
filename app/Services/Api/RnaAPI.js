@@ -71,18 +71,14 @@ class RnaAPI {
      * @returns {Promise<Object>}
      */
     async getAssociationById(id) {
-        console.log("Récupération de l'association avec l'ID :", id);
     try {
         const params = {
             where: `id = '${id}'`,
             limit: 1,
         };
-        console.log("param :", params);
         
         const response = await axios.get(this.baseUrl, { params });
-        console.log("Réponse de l'API:", response.data);
         const results = response.data.results || [];
-        console.log("Résultats extraits :", results);
         
         return {
             success: true,
@@ -90,7 +86,6 @@ class RnaAPI {
             found: results.length > 0,
         };
     } catch (error) {
-        console.error('RNA API Error:', error);
         
         return {
             success: false,
@@ -101,6 +96,25 @@ class RnaAPI {
     }
 }
 
+    async getRateData(rnaId) {
+        try {
+            const response = await axios.get(`/api/asso/note/${rnaId}`);
+            
+            return {
+                success: true,
+                averageRating: response.data.averageRating,
+                totalRatings: response.data.totalRatings
+            };
+        } catch (error) {
+            console.error('Rating API Error:', error);
+            
+            return {
+                success: false,
+                averageRating: null,
+                totalRatings: 0
+            };
+        }
+    }
     /**
      * Valide une URL
      * @param {string} url - URL à valider
