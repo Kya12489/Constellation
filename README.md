@@ -3,6 +3,8 @@
 Constellation est une application web construite avec le framework **Laravel** et un frontend en **Vue.js** via Inertia et Breeze.
 Le projet a pour but de servir de base moderne pour une application complète en PHP/Vue avec authentification, API et gestion d'associations.
 
+Utilisation du framwork Laravel afin de faire le projet plus rapidement grâce au connaissance de base + installation de inertia afin de découvrir une nouvelle technologie (vue.js avec laravel) découverte de nouvelle syntaxe qui semble plus moderne et simple d'utilisation. Découverte de la syntaxe grâce au tutoriel du site Vue.js (ajout de la librairie js-confettie //non supprimer pour le moment. Il sera evidemment supprimée si le site est mis en production ).
+
 ## Fonctionnalités
 
 - ✅ Verification de la validité des site web enregistré sur l'api des associations (fait grace a une requête http)
