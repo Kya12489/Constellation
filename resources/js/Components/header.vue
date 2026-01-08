@@ -17,8 +17,9 @@
 
 <template>
     <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-        <header class="border-b ml-10 grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3">
-            <div class="flex lg:col-start-1 lg:justify-start">
+        <header class="border-b px-6 lg:px-10 grid grid-cols-1 lg:grid-cols-3 items-center gap-4 py-10">
+            <!-- Logo à gauche -->
+            <div class="flex justify-center lg:justify-start">
                 <a :href="'/'">
                     <img
                         class="h-20 w-auto lg:h-32"
@@ -28,7 +29,15 @@
                 </a>
             </div>
             
-            <nav v-if="canLogin" class="col-start-3 -mx-3 flex flex-1 justify-end items-center mr-10">
+            <!-- Titre au centre -->
+            <div class="text-center">
+                <h1 class="text-xl lg:text-2xl font-bold text-gray-800">
+                    Constellation - Votre annuaire pour les associations françaises !
+                </h1>
+            </div>
+            
+            <!-- Navigation à droite -->
+            <nav v-if="canLogin" class="flex justify-center lg:justify-end items-center">
                 <template v-if="$page.props.auth.user">
                     <Link
                         :href="route('dashboard')"
