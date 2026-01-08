@@ -4,49 +4,166 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Association;
+use App\Models\Comment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 
 class AssociationController extends Controller
 {
     private Association $associationModel;
+    
     function __construct()
     {
         $this->associationModel = new Association();
     }
 
-    //créer l'association dans la base de données afin d'obtenir les données complete (president, commentaire, photos, etc) 
-    // | erreur si ça existe déjà
     public function createAssociation(string $rnaId)
-{
-    try {
-        $association = new Association();
-        $association->rna_id = $rnaId;
-        $association->is_verified = false;
-        $association->save();
-    } catch (\Exception $e) {
-        if(str_contains($e->getMessage(), 'Cette association existe déjà')) {
-            return redirect()->to('/association/' . $rnaId);
+    {
+        try {
+            // Vérifier si l'association existe déjà
+            $existing = Association::where('rna_id', $rnaId)->first();
+            
+            if ($existing) {
+                return redirect()->to('/association/' . $rnaId)
+                    ->with('info', 'Cette association existe déjà');
+            }
+            
+            $association = new Association();
+            $association->rna_id = $rnaId;
+            $association->is_verified = false;
+            $association->save();
+            
+            return redirect()->to('/association/' . $rnaId)
+                ->with('success', 'Association créée avec succès');
+                
+        } catch (\Exception $e) {
+            Log::error('Erreur création association: ' . $e->getMessage());
+            return back()->with('error', 'Erreur lors de la création de l\'association');
         }
-        return back()->with('error', 'Erreur lors de la création de l\'association');
     }
-    
-    return redirect()->to('/association/' . $rnaId);
-}
 
     public function detailAssociation(string $rnaId): Response
     {
         $association = $this->associationModel->where('rna_id', $rnaId)->firstOrFail();
+        
+        // Charger les commentaires avec les utilisateurs et trier par date décroissante
+        $comments = $association->comments()
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        // Calculer la note moyenne
+        $averageRating = $association->comments()
+            ->whereNotNull('rating')
+            ->avg('rating');
+        
+        // Calculer le nombre total de notes
+        $totalRatings = $association->comments()
+            ->whereNotNull('rating')
+            ->count();
+        
+        // Vérifier si l'utilisateur connecté a déjà commenté
+        $userComment = null;
+        if (Auth::check()) {
+            $userComment = $association->comments()
+                ->where('user_id', Auth::id())
+                ->first();
+        }
+        
         return Inertia::render('Associations/detail', [
             'association' => $association,
-            'canLogin' => \Route::has('login'),
-            'canRegister' => \Route::has('register'),
+            'comments' => $comments,
+            'averageRating' => $averageRating ? round($averageRating, 1) : null,
+            'totalRatings' => $totalRatings,
+            'userComment' => $userComment,
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
         ]);
+    }
+
+    public function storeComment(Request $request, string $rnaId)
+    {
+        // Vérifier que l'utilisateur est connecté
+        if (!Auth::check()) {
+            return back()->with('error', 'Vous devez être connecté pour commenter');
+        }
+        
+        $association = $this->associationModel->where('rna_id', $rnaId)->firstOrFail();
+        
+        // Valider les données
+        $validated = $request->validate([
+            'content' => 'required|string|min:10|max:1000',
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+        
+        // Vérifier si l'utilisateur a déjà commenté
+        $existingComment = Comment::where('association_id', $association->id)
+            ->where('user_id', Auth::id())
+            ->first();
+        
+        if ($existingComment) {
+            return back()->with('error', 'Vous avez déjà commenté cette association');
+        }
+        
+        // Créer le commentaire
+        Comment::create([
+            'association_id' => $association->id,
+            'user_id' => Auth::id(),
+            'content' => $validated['content'],
+            'rating' => $validated['rating'],
+        ]);
+        
+        return back()->with('success', 'Commentaire ajouté avec succès');
+    }
+
+    public function updateComment(Request $request, string $rnaId, int $commentId)
+    {
+        if (!Auth::check()) {
+            return back()->with('error', 'Vous devez être connecté');
+        }
+        
+        $comment = Comment::findOrFail($commentId);
+        
+        // Vérifier que c'est bien l'auteur du commentaire
+        if ($comment->user_id !== Auth::id()) {
+            return back()->with('error', 'Vous ne pouvez modifier que vos propres commentaires');
+        }
+        
+        $validated = $request->validate([
+            'content' => 'required|string|min:10|max:1000',
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+        
+        $comment->update($validated);
+        
+        return back()->with('success', 'Commentaire modifié avec succès');
+    }
+
+    public function deleteComment(string $rnaId, int $commentId)
+    {
+        if (!Auth::check()) {
+            return back()->with('error', 'Vous devez être connecté');
+        }
+        
+        $comment = Comment::findOrFail($commentId);
+        
+        // Vérifier que c'est bien l'auteur du commentaire
+        if ($comment->user_id !== Auth::id()) {
+            return back()->with('error', 'Vous ne pouvez supprimer que vos propres commentaires');
+        }
+        
+        $comment->delete();
+        
+        return back()->with('success', 'Commentaire supprimé avec succès');
     }
 
     public function listeAssociations(): Response
     {
         return Inertia::render('Associations/ListeAssociations', [
-            'canLogin' => \Route::has('login'),
-            'canRegister' => \Route::has('register'),
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
         ]);
     }
 }

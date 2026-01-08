@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Created by Reliese Model.
  */
@@ -8,7 +7,8 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * Class User
@@ -29,44 +29,47 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class User extends Model
+class User extends Authenticatable
 {
-	protected $table = 'users';
+    use Notifiable;
 
-	protected $casts = [
-		'email_verified_at' => 'datetime'
-	];
+    protected $table = 'users';
 
-	protected $hidden = [
-		'password',
-		'remember_token'
-	];
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
 
-	protected $fillable = [
-		'name',
-		'email',
-		'email_verified_at',
-		'password',
-		'remember_token'
-	];
+    protected $hidden = [
+        'password',
+        'remember_token'
+    ];
 
-	public function associations()
-	{
-		return $this->hasMany(Association::class, 'president_id');
-	}
+    protected $fillable = [
+        'name',
+        'email',
+        'email_verified_at',
+        'password',
+        'remember_token'
+    ];
 
-	public function comments()
-	{
-		return $this->hasMany(Comment::class);
-	}
+    public function associations()
+    {
+        return $this->hasMany(Association::class, 'president_id');
+    }
 
-	public function favorites()
-	{
-		return $this->hasMany(Favorite::class);
-	}
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
-	public function membership_requests()
-	{
-		return $this->hasMany(MembershipRequest::class, 'responded_by');
-	}
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+    public function membership_requests()
+    {
+        return $this->hasMany(MembershipRequest::class, 'responded_by');
+    }
 }
