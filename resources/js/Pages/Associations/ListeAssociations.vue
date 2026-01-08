@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import Pagination from '@/Components/pagination.vue'; // P majuscule
 import Header from '@/Components/header.vue';
 import { Head } from '@inertiajs/vue3';
@@ -46,13 +46,25 @@ watch(page, (newPage) => {
                     
                     <!-- Liste -->
                     <ul class="space-y-3 mb-6">
-                        <li 
-                            v-for="asso in assos" 
-                            :key="asso.id_association" 
-                            class="border p-4 rounded-lg hover:bg-gray-50"
-                        >
-                            <h3 class="font-bold text-lg">{{ asso.id }}</h3>
-                            
+                        <li  v-for="asso in assos" :key="asso.id_association" class="border p-4 rounded-lg hover:bg-gray-50 flex lg:col-start-2 lg:justify-center ">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg">{{ asso.title }}</h3>
+                            <p class="text-black/50">{{ asso.object }}</p>
+                            <p>Créée le {{ asso.creation_date }}</p>
+                            <p>Adresse: {{ asso.street_name_manager }}, {{ asso.pc_address_manager }} {{ asso.country_address_manager }}</p>
+                            </div>
+                            <div class=" ">
+                                <a v-if="asso.website "
+                                    :href=" asso.website"
+                                    class="ml-4 rounded-md px-3 py-2 text-blue-500 ring-1 ring-transparent transition focus:outline-none"
+                                >
+                                    Visiter le site
+                                </a>
+                                <p v-else class="ml-4 rounded-md px-3 py-2 text-blue-500 ring-1 ring-transparent transition focus:outline-none">
+                                    Aucun site web.
+                                </p>
+
+                            </div>
                         </li>
                     </ul>
                     

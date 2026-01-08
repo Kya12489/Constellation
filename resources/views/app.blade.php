@@ -13,7 +13,7 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
-        <div class=" text-black/50 dark:bg-black bg-gray-200 dark:text-white/50">
+        <div class="  dark:bg-black bg-gray-200 ">
             <div class="relative flex min-h-screen flex-col items-center">
                 <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                     @inertia
@@ -26,7 +26,10 @@
             
             document.addEventListener('click', function() {
                 jsConfetti.addConfettiAtPosition({
+                    
+                    
                     confettiRadius: 3,
+                    
                     confettiDispatchPosition: {
                         x: event.clientX,
                         y: event.clientY
