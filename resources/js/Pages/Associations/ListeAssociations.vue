@@ -204,26 +204,29 @@ onMounted(() => {
                                     
                                     <div class="flex lg:flex-col items-start gap-2 justify-center">
                                         <a v-if="asso.website && asso.website !== 'Invalid'"
-                                            :href="asso.website"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center gap-2 whitespace-nowrap"
-                                        >
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                            </svg>
-                                            Visiter le site
-                                        </a>
-                                        
-                                        <a
-                                            :href="'/association/insert/' + asso.id"
-                                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2 whitespace-nowrap"
-                                        >
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                            </svg>
-                                            Voir détails
-                                        </a>
+                                        :href="asso.website"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center gap-2"
+                                    >
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                        </svg>
+                                        Visiter le site
+                                    </a>
+                                    <span v-else-if="asso.website === 'Invalid'" 
+                                       class="px-4 py-2 text-gray-400 text-sm">
+                                        Site invalide
+                                    </span>
+                                    <span v-else class="px-4 py-2 text-gray-400 text-sm">
+                                        Pas de site web
+                                    </span>
+                                    <a
+                                        :href="'/association/insert/' + asso.id"
+                                        class="ml-4 px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors inline-flex items-center gap-2"
+                                    >
+                                        Voir détails
+                                    </a>
                                     </div>
                                 </div>
                             </li>
