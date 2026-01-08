@@ -54,12 +54,15 @@ watch(page, (newPage) => {
                             <p>Adresse: {{ asso.street_name_manager }}, {{ asso.pc_address_manager }} {{ asso.country_address_manager }}</p>
                             </div>
                             <div class=" ">
-                                <a v-if="asso.website "
+                                <a v-if="asso.website && asso.website !== 'Invalid'"
                                     :href=" asso.website"
                                     class="ml-4 rounded-md px-3 py-2 text-blue-500 ring-1 ring-transparent transition focus:outline-none"
                                 >
-                                    Visiter le site
+                                    Visiter le site.
                                 </a>
+                                <p v-else-if="asso.website === 'Invalid'" class="ml-4 rounded-md px-3 py-2 text-blue-500 ring-1 ring-transparent transition focus:outline-none">
+                                    Site web invalid.
+                                </p>
                                 <p v-else class="ml-4 rounded-md px-3 py-2 text-blue-500 ring-1 ring-transparent transition focus:outline-none">
                                     Aucun site web.
                                 </p>
