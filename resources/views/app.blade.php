@@ -13,7 +13,7 @@
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
-        <div class="  dark:bg-black bg-gray-200 ">
+        <div class="bg-gray-200 ">
             <div class="relative flex min-h-screen flex-col items-center">
                 <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                     @inertia
