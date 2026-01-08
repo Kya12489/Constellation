@@ -23,7 +23,7 @@
                     <div class="flex lg:col-start-2 lg:justify-center ">
                             <img
                                 class="h-12 w-auto lg:h-16"
-                                src="/resources/images/logo.png"
+                                src="/images/logo.png"
                                 alt="Constellation Logo"
                             />
                         </div>
