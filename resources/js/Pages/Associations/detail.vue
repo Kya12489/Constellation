@@ -4,7 +4,7 @@ import Header from '@/Components/header.vue';
 import MapWidget from '@/Components/mapWidget.vue';
 import CommentsSection from '@/Components/CommentsSection.vue';
 import { Head, usePage } from '@inertiajs/vue3';
-import RnaAPI from '/App/Services/Api/RnaAPI';
+import RnaAPI from '@/Services/Api/RnaAPI';
 
 const props = defineProps({
     canLogin: Boolean,

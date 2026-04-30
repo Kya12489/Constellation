@@ -6,7 +6,7 @@
  * Les données sont chargées via une API lors du montage du composant
  */
 import { ref, onMounted, computed } from 'vue';
-import RnaAPI from '/App/Services/Api/RnaAPI';
+import RnaAPI from '@/Services/Api/RnaAPI';
 
 /**
  * Props du composant

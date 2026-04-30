@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import MapAPI from '/App/Services/Api/MapAPI';
+import MapAPI from '@/Services/Api/MapAPI';
 
 const props = defineProps({
     association: {

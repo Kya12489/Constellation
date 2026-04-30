@@ -4,7 +4,7 @@ import Header from '@/Components/header.vue';
 import PaginationWidget from '@/Components/pagination.vue';
 import RatingDisplay from '@/Components/RatingDisplay.vue';
 import { Head } from '@inertiajs/vue3';
-import RnaAPI from '/App/Services/Api/RnaAPI';
+import RnaAPI from '@/Services/Api/RnaAPI';
 
 const props = defineProps({
     canLogin: Boolean,
