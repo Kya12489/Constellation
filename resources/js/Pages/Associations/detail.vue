@@ -84,7 +84,7 @@ const removeFav = function(){
                         <!-- Contenu -->
                         <div v-else-if="infoAssoApi" class="p-6">
                             <h2 class="text-2xl font-bold mb-6 text-gray-800">
-                                {{ infoAssoApi.title || 'Association' }}
+                                {{ infoAssoApi.title || 'Association' }} TOTO
                                 <button
                                     @click="favoris.isFavoris ? removeFav() : makeFav()"
                                     :class="favoris.isFavoris ? 'text-red-500' : 'text-gray-400'"
