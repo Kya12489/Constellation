@@ -86,8 +86,8 @@ const removeFav = function(){
                             <h2 class="text-2xl font-bold mb-6 text-gray-800">
                                 {{ infoAssoApi.title || 'Association' }} TOTO
                                 <button
-                                    @click="favoris.isFavoris ? removeFav() : makeFav()"
-                                    :class="favoris.isFavoris ? 'text-red-500' : 'text-gray-400'"
+                                    @click="props.favoris.isFavoris ? removeFav() : makeFav()"
+                                    :class="props.favoris.isFavoris ? 'text-red-500' : 'text-gray-400'"
                                 >
                                     ❤
                                 </button>
