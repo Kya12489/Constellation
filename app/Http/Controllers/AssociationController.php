@@ -78,10 +78,13 @@ class AssociationController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         
-        $nbFavoris = Favorite::Where("associationId",$association->id)->count();
+        $nbFavoris = Favorite::where('idAssociation', $association->id)->count();
+
         $isUserFavoris = null;
         if(Auth::check()){
-             $isUserFavoris = Favorite::Where("associationId",$association->id)->with("userId",Auth::id())->get();
+            $isUserFavoris = Favorite::where('idAssociation', $association->id)
+                                    ->where('idUser', Auth::id())
+                                    ->exists(); // retourne true/false
         }
         // Calculer la note moyenne
         $averageRating = $association->comments()
