@@ -74,6 +74,9 @@ onMounted(async () => {
                         <div v-else-if="infoAssoApi" class="p-6">
                             <h2 class="text-2xl font-bold mb-6 text-gray-800">
                                 {{ infoAssoApi.title || 'Association' }}
+                                <button>
+                                    HEY
+                                </button>
                             </h2>
 
                             <!-- Tableau -->
