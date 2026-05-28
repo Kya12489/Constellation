@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Association;
+use App\Models\Favorite;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,9 +15,18 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+
+    private Favorite $favorisModel;
+
     /**
      * Display the user's profile form.
      */
+    function __construct()
+    {
+        $this->favorisModel = new Favorite();
+    }
+
+
     public function edit(Request $request): Response
     {
         return Inertia::render('Profile/Edit', [
@@ -59,5 +70,35 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function makeFavoris(Association $association){
+        if(!Auth::check()){
+            return back()->with("error","vous devez etre connecter");
+        }
+
+        $userId=Auth::id();
+
+        $favoris = new Favorite();
+        $favoris->association_id = $association->id;
+        $favoris->user_id = $userId;
+        $favoris->save();
+
+        return back()->with('success',"ajout reussis");
+
+    }
+
+    public function removeFavoris(Association $association){
+        if(!Auth::check()){
+            return back()->with("error","vous devez etre connecter");
+        }
+
+        $userId=Auth::id();
+
+         $favoris = Favorite::where('user_id', Auth::id())
+                ->with('association') 
+                ->delete();
+        
+        return back()->with('success',"suppresion reussis");
     }
 }

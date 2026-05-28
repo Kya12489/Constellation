@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Association;
 use App\Models\Comment;
+use App\Models\Favorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Log;
 class AssociationController extends Controller
 {
     private Association $associationModel;
+    private Favorite $favoriteModel;
     
     /**
      * Constructeur - Initialise le modèle Association
@@ -26,6 +28,7 @@ class AssociationController extends Controller
     function __construct()
     {
         $this->associationModel = new Association();
+        $this->favoriteModel = new Favorite();
     }
 
     /**
@@ -75,6 +78,11 @@ class AssociationController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         
+        $nbFavoris = Favorite::Where("associationId",$association->id)->count();
+        $isUserFavoris = null;
+        if(Auth::check()){
+             $isUserFavoris = Favorite::Where("associationId",$association->id)->with("userId",Auth::id())->get();
+        }
         // Calculer la note moyenne
         $averageRating = $association->comments()
             ->whereNotNull('rating')
@@ -96,6 +104,7 @@ class AssociationController extends Controller
         return Inertia::render('Associations/detail', [
             'association' => $association,
             'comments' => $comments,
+            'favorites'=>["nbFavoris"=>$nbFavoris,"isFavoris"=>$isUserFavoris],
             'averageRating' => $averageRating ? round($averageRating, 1) : null,
             'totalRatings' => $totalRatings,
             'userComment' => $userComment,

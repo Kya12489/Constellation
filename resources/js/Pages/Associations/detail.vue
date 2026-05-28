@@ -5,11 +5,13 @@ import MapWidget from '@/Components/mapWidget.vue';
 import CommentsSection from '@/Components/CommentsSection.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import RnaAPI from '@/Services/Api/RnaAPI';
+import axios from 'axios';
 
 const props = defineProps({
     canLogin: Boolean,
     canRegister: Boolean,
     association: Object,
+    favoris: Array,
     comments: Array,
     averageRating: Number,
     totalRatings: Number,
@@ -45,6 +47,14 @@ onMounted(async () => {
         loading.value = false;
     }
 });
+
+const makeFav = function(){
+    route.put("/user/favoris/add/"+props.association.id);
+
+}
+const removeFav = function(){
+    route.delete("/user/favoris/remove/"+props.association.id);
+}
 </script>
 
 <template>
@@ -74,11 +84,15 @@ onMounted(async () => {
                         <div v-else-if="infoAssoApi" class="p-6">
                             <h2 class="text-2xl font-bold mb-6 text-gray-800">
                                 {{ infoAssoApi.title || 'Association' }}
-                                <button>
-                                    HEY
+                                <button
+                                    v-if="isAuthenticated"
+                                    @click="favoris.isFavoris ? removeFav() : makeFav()"
+                                    :class="favoris.isFavoris ? 'text-red-500' : 'text-gray-400'"
+                                >
+                                    ❤
                                 </button>
                             </h2>
-
+                            
                             <!-- Tableau -->
                             <table class="w-full">
                                 <tbody class="divide-y divide-gray-200">
