@@ -28,7 +28,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Favorite extends Model
 {
-	protected $table = 'favorites';
+	protected $table = 'favoris';
 
 	protected $casts = [
 		'user_id' => 'int',
